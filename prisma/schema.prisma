@@ -1,0 +1,86 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model aime {
+  id             Int          @id @default(autoincrement())
+  utilisateur_id Int?
+  post_id        Int?
+  date_creation  DateTime?    @default(now()) @db.DateTime(0)
+  utilisateur    utilisateur? @relation(fields: [utilisateur_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "aime_ibfk_1")
+  post           post?        @relation(fields: [post_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "aime_ibfk_2")
+
+  @@index([post_id], map: "post_id")
+  @@index([utilisateur_id], map: "utilisateur_id")
+}
+
+model commentaire {
+  id             Int          @id @default(autoincrement())
+  utilisateur_id Int?
+  post_id        Int?
+  message        String?      @db.Text
+  date_creation  DateTime?    @default(now()) @db.DateTime(0)
+  utilisateur    utilisateur? @relation(fields: [utilisateur_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "commentaire_ibfk_1")
+  post           post?        @relation(fields: [post_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "commentaire_ibfk_2")
+
+  @@index([post_id], map: "post_id")
+  @@index([utilisateur_id], map: "utilisateur_id")
+}
+
+model follower {
+  id                                             Int          @id @default(autoincrement())
+  following_id                                   Int?
+  follower_id                                    Int?
+  date_creation                                  DateTime?    @default(now()) @db.DateTime(0)
+  utilisateur_follower_following_idToutilisateur utilisateur? @relation("follower_following_idToutilisateur", fields: [following_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "follower_ibfk_1")
+  utilisateur_follower_follower_idToutilisateur  utilisateur? @relation("follower_follower_idToutilisateur", fields: [follower_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "follower_ibfk_2")
+
+  @@index([follower_id], map: "follower_id")
+  @@index([following_id], map: "following_id")
+}
+
+model post {
+  id                Int           @id @default(autoincrement())
+  utilisateur_id    Int?
+  caption           String?       @db.Text
+  date_creation     DateTime?     @default(now()) @db.DateTime(0)
+  date_modification DateTime?     @default(now()) @db.DateTime(0)
+  aime              aime[]
+  commentaire       commentaire[]
+  utilisateur       utilisateur?  @relation(fields: [utilisateur_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "post_ibfk_1")
+
+  @@index([utilisateur_id], map: "utilisateur_id")
+}
+
+model profile {
+  id                Int          @id @default(autoincrement())
+  id_utilisateur    Int?         @unique(map: "id_utilisateur")
+  sexe              String?      @db.VarChar(10)
+  pays              String?      @db.VarChar(100)
+  ville             String?      @db.VarChar(100)
+  date_creation     DateTime?    @default(now()) @db.DateTime(0)
+  date_modification DateTime?    @default(now()) @db.DateTime(0)
+  utilisateur       utilisateur? @relation(fields: [id_utilisateur], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "profile_ibfk_1")
+}
+
+model utilisateur {
+  id                                          Int           @id @default(autoincrement())
+  firstname                                   String?       @db.VarChar(100)
+  lastname                                    String?       @db.VarChar(100)
+  email                                       String?       @unique(map: "email") @db.VarChar(100)
+  password                                    String?       @db.VarChar(255)
+  isAdmin                                     Boolean?      @default(false)
+  date_creation                               DateTime?     @default(now()) @db.DateTime(0)
+  date_modification                           DateTime?     @default(now()) @db.DateTime(0)
+  aime                                        aime[]
+  commentaire                                 commentaire[]
+  follower_follower_following_idToutilisateur follower[]    @relation("follower_following_idToutilisateur")
+  follower_follower_follower_idToutilisateur  follower[]    @relation("follower_follower_idToutilisateur")
+  post                                        post[]
+  profile                                     profile?
+}
