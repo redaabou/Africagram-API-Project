@@ -50,6 +50,7 @@ model post {
   caption           String?       @db.Text
   date_creation     DateTime?     @default(now()) @db.DateTime(0)
   date_modification DateTime?     @default(now()) @db.DateTime(0)
+  image_url         String?       @db.VarChar(750)
   aime              aime[]
   commentaire       commentaire[]
   utilisateur       utilisateur?  @relation(fields: [utilisateur_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "post_ibfk_1")
@@ -70,11 +71,11 @@ model profile {
 
 model utilisateur {
   id                                          Int           @id @default(autoincrement())
-  firstname                                   String?       @db.VarChar(100)
-  lastname                                    String?       @db.VarChar(100)
-  email                                       String?       @unique(map: "email") @db.VarChar(100)
-  password                                    String?       @db.VarChar(255)
-  isAdmin                                     Boolean?      @default(false)
+  firstname                                   String       @db.VarChar(100)
+  lastname                                    String       @db.VarChar(100)
+  email                                       String       @unique(map: "email") @db.VarChar(100)
+  password                                    String       @db.VarChar(255)
+  isAdmin                                     Boolean      @default(false)
   date_creation                               DateTime?     @default(now()) @db.DateTime(0)
   date_modification                           DateTime?     @default(now()) @db.DateTime(0)
   aime                                        aime[]
