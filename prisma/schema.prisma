@@ -51,6 +51,7 @@ model post {
   date_creation     DateTime?     @default(now()) @db.DateTime(0)
   date_modification DateTime?     @default(now()) @db.DateTime(0)
   image_url         String?       @db.VarChar(750)
+  total_likes       Int?          @default(0)
   aime              aime[]
   commentaire       commentaire[]
   utilisateur       utilisateur?  @relation(fields: [utilisateur_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "post_ibfk_1")
