@@ -4,8 +4,9 @@ const asyncHandler = require('express-async-handler')
 
 exports.likePost = asyncHandler(async(req,res)=>{
     console.log("hello")
+    const post_id = parseInt(req.params.postId)
     await prisma.$transaction(async(prisma)=>{
-           const post_id = parseInt(req.params.postId)
+           
             const utilisateur_id = parseInt(req.user.id)
              await prisma.aime.create({
                 data:{
