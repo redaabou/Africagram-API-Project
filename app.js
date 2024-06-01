@@ -4,12 +4,15 @@ const app=express()
 const AuthRoute = require("./routes/AuthRoutes")
 const PostRoute = require("./routes/PostRoutes")
 const LikeRoute = require("./routes/LikesRoutes")
+const Err = require("./errors/index")
 app.use(express.json())
 
 
 app.use("/auth" , AuthRoute)
 app.use("/posts" , PostRoute)
 app.use("/like" , LikeRoute)
+
+app.all("*",(req,res,next)=>next(Err.NotFond(req.originalUrl)))
 
 app.use((err,req,res,next)=>{
     
