@@ -6,6 +6,7 @@ const prisma = new PrismaClient()
 const jwt = require('jsonwebtoken');
 const {hashPassword} = require("../utils/hashPassword")
 const {comparePass} = require("../utils/comparePasswords")
+const Err = require("../errors/index")
 
 exports.SingUp = asyncHandler(async(req,res,)=>{
     req.body.password = hashPassword(req.body.password)
@@ -19,18 +20,18 @@ res.status(200).json({
 })
 })
 
-exports.Login = asyncHandler(async(req,res)=>{
+exports.Login = asyncHandler(async(req,res,next)=>{
     const getOneUser = await prisma.utilisateur.findUnique({
         where: {
             email: req.body.email
         }
     })
     if(!getOneUser){
-     res.status(401).json({message:"Invalid email or password"})
+        next(Err.Unauthenticated("Invalid email or password"))
     }
     const isPassword = await comparePass(req.body.password , getOneUser.password)
     if(!isPassword){
-        res.status(401).json({message:"Invalid email or password"})
+        next(Err.Unauthenticated("Invalid email or password"))
     }
     const tokenL = token(getOneUser.id)
     res.status(200).json({
@@ -40,23 +41,33 @@ exports.Login = asyncHandler(async(req,res)=>{
 })
 
 exports.protect = asyncHandler(async(req,res,next)=>{
-    console.log(req.headers)
-    let token
+   let token
     if(req.headers.authorization && req.headers.authorization.startsWith("Bear")){
     token = req.headers.authorization.split(" ")[1]
     }
+    
     if(!token){
-        return res.status(401).json({message:"Not authorized to access this route"})
+        return next(Err.Unauthenticated("Not authorized to access this route")) 
     }
-    const decoded =  jwt.verify(token , process.env.jwt_web_key)
-    console.log(decoded)
+    let decodedVerif
+    jwt.verify(token , process.env.jwt_web_key,(err,decoded)=>{
+        if (err) {
+            if (err.name === 'TokenExpiredError') {
+                return next(Err.Unauthenticated('Token has expired'));
+            }
+            return next(Err.Unauthenticated('Failed to authenticate token')) ;
+        }
+        decodedVerif = decoded
+    })
+   
+    
     const currentUser = await prisma.utilisateur.findUnique({
         where:{
-            id:decoded.userId
+            id:decodedVerif.userId
         }
     })
     if(!currentUser){
-        return res.status(401).json({message:"User not found"})
+        return next(Err.Unauthenticated("User not found"));
     }
     console.log(currentUser)
     req.user = currentUser
