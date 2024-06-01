@@ -1,3 +1,4 @@
+
 const asyncHandler = require('express-async-handler')
 const {PrismaClient} = require("@prisma/client")
 const {  token } = require('../utils/jwt')
@@ -41,7 +42,7 @@ exports.Login = asyncHandler(async(req,res,next)=>{
 
 exports.protect = asyncHandler(async(req,res,next)=>{
    let token
-    if(req.headers.authorization.startsWith("Bear")){
+    if(req.headers.authorization && req.headers.authorization.startsWith("Bear")){
     token = req.headers.authorization.split(" ")[1]
     }
     

@@ -60,6 +60,7 @@ exports.getAllPosts = asyncHandler(async(req,res)=>{
          paginate.pre = page-1
      }
     const posts = await prisma.post.findMany({
+        include:{commentaire:true},
         skip,
         take
     })
