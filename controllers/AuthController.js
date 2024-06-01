@@ -49,6 +49,7 @@ exports.protect = asyncHandler(async(req,res,next)=>{
     if(!token){
         return next(Err.Unauthenticated("Not authorized to access this route")) 
     }
+
     let decodedVerif
     jwt.verify(token , process.env.jwt_web_key,(err,decoded)=>{
         if (err) {
@@ -66,6 +67,7 @@ exports.protect = asyncHandler(async(req,res,next)=>{
             id:decodedVerif.userId
         }
     })
+
     if(!currentUser){
         return next(Err.Unauthenticated("User not found"));
     }
@@ -80,4 +82,5 @@ exports.allowedTo = (admin) =>asyncHandler(async(req,res,next)=>{
     }
      next()  
     })
+    
     

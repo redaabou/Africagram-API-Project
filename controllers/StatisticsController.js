@@ -4,10 +4,7 @@ const asyncHandler = require('express-async-handler')
 
 const globalFct = (par)=> prisma.utilisateur.aggregate({
     where: {
-        profile:{
-            pays:par,
-              
-        }
+        profile:par
     },
     _count:true
 });
@@ -17,17 +14,10 @@ exports.allStatistics = asyncHandler(async (req, res) => {
     const users = await prisma.utilisateur.count();
 
     // total of users for each country
-    const usersByCountry = await globalFct(req.query.pays) 
+    const usersByCountry = await globalFct({pays:req.query.pays}) 
 
     // totale users by gender
-    const genderDistribution = await prisma.utilisateur.aggregate({
-       where:{
-        profile:{
-            sexe:req.query.sexe
-        }
-       },
-       _count:true
-      });
+    const genderDistribution = await globalFct({sexe:req.query.sexe})
 
     // Average number of posts per user
     // total number of posts
