@@ -27,7 +27,7 @@ exports.allStatistics = asyncHandler(async (req, res) => {
         }
     });
 
-    const avgPostsPerUser = totalPosts / users;
+    const avgPostsPerUser = (totalPosts / users)*100 ;
        
     
     res.status(200).json({
@@ -35,7 +35,7 @@ exports.allStatistics = asyncHandler(async (req, res) => {
             totalUsers: `The total of all users is: ${users}`,
             usersByCountry: `The total of users living in ${req.query.pays} is: ${usersByCountry._count}`,
             genderDistribution: `The total of ${req.query.sexe} is: ${genderDistribution._count}`,
-            avgPostsPerUser: `The post average for the user with id ${req.query.userId} is: ${avgPostsPerUser}`
+            avgPostsPerUser: `The post average per users is: ${avgPostsPerUser}%`
         }
     });
 });

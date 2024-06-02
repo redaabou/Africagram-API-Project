@@ -22,12 +22,12 @@ app.use("/auth", AuthRoute);
 app.use("/posts", PostRoute);
 app.use("/like", LikeRoute);
 app.use("/statistics", StatisticsRoute)
-
+app.use("/comment", CommentRoute)
 
 app.all("*",(req,res,next)=>{
   next(Err.NotFond(req.originalUrl))
 })
-app.use("/comment", CommentRoute)
+
 
 app.use((err, req, res, next) => {
   res.status(400).json({
