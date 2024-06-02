@@ -7,7 +7,7 @@ const { v4 :uuidv4 } = require("uuid")
 
 
 const multerFilter = (req,file,cb)=>{
-    console.log(file)
+   
     if(file.mimetype.startsWith("image")){
         cb(null , true)
     }else{
@@ -20,15 +20,17 @@ const upload = multer({storage:multerStorage , fileFilter:multerFilter})
  exports.uploadImage = upload.single("image_url")
 
  exports.resizeImagePost = async(req ,res,next)=>{
-    const fileName = `post-${uuidv4()}-${Date.now()}.jpeg`
-   await sharp(req.file.buffer).resize(600,600).toFormat("jpeg").
-   jpeg({quality:90}).toFile(`uploads/posts/${fileName}`)
-   req.body.image_url = fileName
-   next()
+        const fileName = `post-${uuidv4()}-${Date.now()}.jpeg`
+        if(req.file){
+        await sharp(req.file.buffer).resize(600,600).toFormat("jpeg").
+        jpeg({quality:90}).toFile(`uploads/posts/${fileName}`)
+        req.body.image_url = fileName
+        }
+        next()
 }
 
 exports.addPostController = asyncHandler(async(req,res)=>{
-    console.log(req.user.id)
+    
     const newPost = await prisma.post.create({
         data:{
             ...req.body,
