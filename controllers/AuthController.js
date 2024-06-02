@@ -61,7 +61,7 @@ exports.protect = asyncHandler(async(req,res,next)=>{
         decodedVerif = decoded
     })
    
-    
+    console.log(decodedVerif)
     const currentUser = await prisma.utilisateur.findUnique({
         where:{
             id:decodedVerif.userId
@@ -71,7 +71,7 @@ exports.protect = asyncHandler(async(req,res,next)=>{
     if(!currentUser){
         return next(Err.Unauthenticated("User not found"));
     }
-    console.log(currentUser)
+    
     req.user = currentUser
     next()
 })

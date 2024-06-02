@@ -8,6 +8,7 @@ const AuthRoute = require("./routes/AuthRoutes");
 const PostRoute = require("./routes/PostRoutes");
 const LikeRoute = require("./routes/LikesRoutes");
 const StatisticsRoute = require('./routes/StatisticsRoutes')
+const Err = require("./errors/index")
 const CommentRoute = require('./routes/CommentRoutes')
 
 const port = process.env.APP_PORT || 8000;
@@ -21,6 +22,11 @@ app.use("/auth", AuthRoute);
 app.use("/posts", PostRoute);
 app.use("/like", LikeRoute);
 app.use("/statistics", StatisticsRoute)
+
+
+app.all("*",(req,res,next)=>{
+  next(Err.NotFond(req.originalUrl))
+})
 app.use("/comment", CommentRoute)
 
 app.use((err, req, res, next) => {
