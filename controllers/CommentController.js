@@ -8,7 +8,8 @@ exports.addComment = asyncHandler(async (req, res) => {
     const comment = await prisma.commentaire.create({
         data:{
             ...req.body,
-            utilisateur_id:parseInt(req.params.id)
+            post_id:parseInt(req.params.post_id),
+            utilisateur_id:parseInt(req.user.id)
         }
     })
     res.status(200).json({data:comment})

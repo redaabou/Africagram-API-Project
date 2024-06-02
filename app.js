@@ -8,6 +8,7 @@ const AuthRoute = require("./routes/AuthRoutes");
 const PostRoute = require("./routes/PostRoutes");
 const LikeRoute = require("./routes/LikesRoutes");
 const StatisticsRoute = require('./routes/StatisticsRoutes')
+const CommentRoute = require('./routes/CommentRoutes')
 
 const port = process.env.APP_PORT || 8000;
 
@@ -20,6 +21,7 @@ app.use("/auth", AuthRoute);
 app.use("/posts", PostRoute);
 app.use("/like", LikeRoute);
 app.use("/statistics", StatisticsRoute)
+app.use("/comment", CommentRoute)
 
 app.use((err, req, res, next) => {
   res.status(400).json({
