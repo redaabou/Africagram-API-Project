@@ -1,105 +1,124 @@
-# Africagram API
+# Africagram - Social Media API
 
-## Project Overview
-Africagram is a photo-sharing platform designed specifically for Africans and by Africans. This API allows users to upload images, follow other users, like and comment on posts, and provides an admin dashboard with key analytics.
+## 📖 Project Context
 
-## Features
-- **User Authentication and Authorization**: Secure user authentication and authorization using JWT.
-- **Image Uploads**: Users can upload images in JPEG, PNG, and GIF formats.
-- **Like and Comment**: Users can like and comment on posts.
-- **Follow Users**: Users can follow and unfollow other users.
-- **News Feed**: Generates a news feed sorted by publication date with pagination.
-- **Admin Analytics Dashboard**: Provides key analytics such as total users, users by country, average posts per user, and gender distribution.
+Africagram is a **social media platform** designed specifically for Africans. Similar to other photo-sharing networks, users can **upload images, like and comment on posts, and follow other users**. The primary goal is to create an **innovative and secure** application while ensuring data privacy.
 
-## Technologies Used
-- **Node.js**: Server-side JavaScript runtime.
-- **Express**: Web framework for Node.js.
-- **MySQL**: Relational database management system.
-- **Prisma**: ORM (Object-Relational Mapping) tool.
-- **JWT**: JSON Web Token for secure authentication.
-- **Multer**: Middleware for handling multipart/form-data, used for image uploads.
-- **Joi**: Object schema validation library for validating request data.
+---
 
-## Project Setup
+## 🚀 Application Features
 
-### Prerequisites
-- Node.js (v12.x or higher)
-- MySQL (v5.7 or higher)
+### 📌 **Core Features**
 
-### Installation
+- **User Authentication**: Users must sign in to access their accounts.
+- **Image Upload**: Users can upload images in JPEG, PNG, or GIF format (max 5MB).
+- **Likes and Comments**: Users can like and comment on posts.
+- **Followers**: Users can follow others.
+- **News Feed**: The system generates a feed sorted by the most recent posts.
+- **Admin Dashboard**: Displays analytics such as total users, users by country, average posts per user, and gender distribution.
 
-1. **Clone the repository:**
-    ```sh
-    git clone https://github.com/yourusername/africagram-api.git
-    cd africagram-api
-    ```
+### 📌 **Bonus Features** (Optional Enhancements)
 
-2. **Install dependencies:**
-    ```sh
-    npm install
-    ```
+- **OTP Verification**: Additional security via SMS/email code verification.
+- **Daily Upload Limit**: Users can upload a maximum of 10 images per day.
+- **Activity Logs**: Track and visualize modifications.
+- **News Feed Pagination**: Display posts in increments of 5 per load.
 
-3. **Set up the database:**
-    - Create a MySQL database.
-    - Configure the database connection in the `.env` file (copy from `.env.example`).
+---
 
-    ```sh
-    cp .env.example .env
-    ```
+## 🏗️ **Database Schema**
 
-4. **Run database migrations:**
-    ```sh
-    npx prisma migrate deploy
-    ```
+- **User**: `id`, `id_profile`, `firstname`, `lastname`, `email`, `password`, `isAdmin`, `created_at`, `updated_at`
+- **Profile**: `id`, `user_id`, `gender`, `country`, `city`, `created_at`, `updated_at`
+- **Post**: `id`, `user_id`, `caption`, `image_url`, `created_at`, `updated_at`
+- **Like**: `id`, `user_id`, `post_id`, `created_at`
+- **Comment**: `id`, `user_id`, `post_id`, `message`, `created_at`
+- **Follower**: `id`, `following_id`, `follower_id`, `created_at`
 
-5. **Start the server:**
-    ```sh
-    npm start
-    ```
+---
 
-## API Endpoints
+## 🔌 API Endpoints
 
-### User Endpoints
-- **Register**: `POST /api/register`
-- **Login**: `POST /api/login`
-- **Logout**: `POST /api/logout`
-- **Update User**: `PUT /api/users/:id`
-- **Get User Posts**: `GET /api/users/:id/posts`
+- **User Management**:
+  - Register a new user
+  - Update user data
+  - Authenticate a user
 
-### Post Endpoints
-- **Create Post**: `POST /api/posts`
-- **Like Post**: `POST /api/posts/:id/like`
-- **Comment on Post**: `POST /api/posts/:id/comment`
-- **Get Post**: `GET /api/posts/:id`
-- **Get News Feed**: `GET /api/posts/newsfeed`
+- **Post Management**:
+  - Retrieve posts of an authenticated user
+  - Create a new post
 
-### Analytics Endpoints
-- **Total Users**: `GET /api/admin/total-users`
-- **Users by Country**: `GET /api/admin/users-by-country`
-- **Average Posts per User**: `GET /api/admin/avg-posts-per-user`
-- **Gender Distribution**: `GET /api/admin/gender-distribution`
+- **Social Features**:
+  - Like a post
+  - Follow a user
+  - Comment on a post
+  - Retrieve the latest news feed
 
-## Dynamic Sections
-- **Posts**: Dynamically render posts on the frontend using your preferred templating engine or framework.
-- **Comments and Likes**: Display likes and comments dynamically as users interact with posts.
+- **Analytics & Security**:
+  - Get app statistics
+  - Implement OTP verification (Bonus)
 
-## Email Functionality
-- **Nodemailer**: Set up for sending emails (e.g., for user notifications or admin alerts).
-- **Integration**: Can be integrated with email marketing services like Mailchimp or SendGrid.
+---
 
-## Logging
-- Middleware to log incoming requests.
-- Logs can be saved to a text file or any other logging service.
+## 🛠️ Technologies Used
 
-## Data Validation
-- **Joi**: Used for object schema validation to ensure request data integrity.
+- **Backend**: Node.js, Express, TypeScript
+- **Database**: MongoDB (via Mongoose)
+- **Validation**: Express-validator
+- **Authentication**: JWT
+- **Image Uploads**: Cloudinary / Amazon S3
+- **Error Handling**: Custom error middleware
+- **Testing**: Jest & Supertest
+- **Email Services**: Nodemailer (SMTP)
+- **Cron Jobs**: Automate email newsletters
 
-## Contributing
-Contributions are welcome! Please open an issue or submit a pull request for any improvements or additions.
+---
 
-## License
-This project is licensed under the MIT License.
+## 💻 Installation
 
-## Contact
-For any questions or inquiries, please contact [aboulouafareda@gmail.com, meftahiyassere@gmail.com].
+1. **Clone the project**:
+
+   ```bash
+   git clone https://github.com/your-username/africagram.git
+   cd africagram
+   ```
+
+2. **Install dependencies**:
+
+   ```bash
+   npm install
+   ```
+
+3. **Run the application**:
+
+   ```bash
+   npm start
+   ```
+
+4. Access the API: `http://localhost:5000`
+
+---
+
+## 🎉 Contribution
+
+Contributions are welcome!
+
+- Fork the repo
+- Create a branch (`feature/improvement`)
+- Submit a PR
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License. See the **LICENSE** file for details.
+
+---
+
+## 📬 Contact
+
+For any questions, feel free to contact me:
+
+- **Email**: [aboulouafareda@gmail.com]
+- **LinkedIn**: [Reda Aboulouafa](www.linkedin.com/in/reda-aboulouafa-993a11220)
 
